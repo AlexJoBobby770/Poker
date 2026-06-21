@@ -27,7 +27,8 @@ class EquityEngine:
 
         for _ in range(self.num_simulations):
             # Sample remaining cards randomly for board completions
-            deck_sample = random.sample(remaining_deck, len(remaining_deck))
+            k = (2 * num_opponents) + needed_board_cards
+            deck_sample = random.sample(remaining_deck, k)
             
             # Deal opponent hands dynamically from the randomized sample
             opponents_hands = []
