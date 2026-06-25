@@ -14,3 +14,8 @@ __pycache__/
 # Local IDE settings
 .vscode/
 .idea/
+backend/venv/
+backend/.env
+__pycache__/
+*.pyc
+.pytest_cache/
