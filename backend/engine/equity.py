@@ -1,6 +1,6 @@
 # backend/engine/equity.py
 import random
-from engine.hand_evaluator import HandEvaluator
+from backend.engine.hand_evaluator import HandEvaluator
 
 class EquityEngine:
     def __init__(self, evaluator: HandEvaluator, num_simulations: int = 10000):

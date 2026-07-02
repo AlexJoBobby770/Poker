@@ -2,18 +2,15 @@
 import datetime
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean, JSON
 from sqlalchemy.orm import relationship
-from database import Base
+from backend.database import Base
 
 class GameSession(Base):
     __tablename__ = "game_sessions"
 
     id = Column(Integer, primary_key=True, index=True)
-    session_name = Column(String, nullable=True, default=lambda: f"Session_{datetime.date.today().isoformat()}")
-    small_blind = Column(Float, nullable=False, default=1.0)
-    big_blind = Column(Float, nullable=False, default=2.0)
+    num_players = Column(Integer, nullable=False)
+    notes = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    ended_at = Column(DateTime, nullable=True)
-    net_profit = Column(Float, default=0.0)
 
     # Relationship to cleanly query hands belonging to this session
     hands = relationship("HandHistory", back_populates="session", cascade="all, delete-orphan")

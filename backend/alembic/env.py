@@ -28,8 +28,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # 4. Import your database structures so Alembic can track changes
-from database import Base
-from models.poker_models import GameSession, HandHistory, OpponentProfile
+from backend.database import Base
+from backend.models.poker_models import GameSession, HandHistory, OpponentProfile
 target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
