@@ -1,6 +1,6 @@
-from backend.engine.hand_evaluator import HandEvaluator
-from backend.engine.equity import EquityEngine
-from backend.engine.pot_odds import PotOddsCalculator
+from engine.hand_evaluator import HandEvaluator
+from engine.equity import EquityEngine
+from engine.pot_odds import PotOddsCalculator
 
 
 def test_hand_evaluator_rank_type():

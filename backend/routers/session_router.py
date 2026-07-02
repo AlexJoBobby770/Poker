@@ -1,9 +1,9 @@
 # backend/routers/session_router.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.database import get_db
-from backend.models.poker_models import GameSession, HandHistory
-from backend.schemas.poker_schemas import SessionCreate, SessionResponse
+from database import get_db
+from models.poker_models import GameSession, HandHistory
+from schemas.poker_schemas import SessionCreate, SessionResponse
 from typing import List, Dict, Any
 
 router = APIRouter(prefix="/session", tags=["Game Sessions"])
@@ -30,7 +30,7 @@ def create_session(session_data: SessionCreate, db: Session = Depends(get_db)):
         )
 
 @router.get("/{session_id}", response_model=Dict[str, Any])
-def get_session_metadata(session_id: int, db: Session = Depends(get_db)):
+def get_session_metadata(session_id: UUID, db: Session = Depends(get_db)):
     session = db.query(GameSession).filter(GameSession.id == session_id).first()
     if not session:
         raise HTTPException(status_code=404, detail=f"Game session with ID {session_id} not found")

@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 from typing import List, Optional
+from uuid import UUID
 from pydantic import BaseModel, Field, field_validator
 
 CARD_REGEX = re.compile(r"^[2-9TJQKA][shdc]$")
@@ -10,7 +11,7 @@ class SessionCreate(BaseModel):
     notes: Optional[str] = None
 
 class SessionResponse(BaseModel):
-    id: int
+    id: UUID
     num_players: int
     notes: Optional[str] = None
     created_at: datetime
@@ -20,7 +21,7 @@ class SessionResponse(BaseModel):
 
 
 class RecommendRequest(BaseModel):
-    session_id: int
+    session_id: UUID
     hole_cards: List[str] = Field(..., min_items=2, max_items=2)
     community_cards: List[str] = Field(default=[])
     street: str = Field(..., description="preflop, flop, turn, or river")
@@ -56,3 +57,12 @@ class RecommendRequest(BaseModel):
         if len(all_cards) != len(set(all_cards)):
             raise ValueError("Duplicate cards detected across hole cards and community cards.")
         return community_cards
+
+    @field_validator("street")
+    @classmethod
+    def validate_street(cls, street: str) -> str:
+        normalized = street.lower()
+        valid_streets = {"preflop", "flop", "turn", "river"}
+        if normalized not in valid_streets:
+            raise ValueError("street must be one of preflop, flop, turn, or river")
+        return normalized

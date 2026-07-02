@@ -1,12 +1,12 @@
 # backend/routers/recommend_router.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.database import get_db
-from backend.models.poker_models import GameSession, HandHistory
-from backend.schemas.poker_schemas import RecommendRequest
-from backend.engine.hand_evaluator import HandEvaluator
-from backend.engine.equity import EquityEngine
-from backend.engine.pot_odds import PotOddsCalculator
+from database import get_db
+from models.poker_models import GameSession, HandHistory
+from schemas.poker_schemas import RecommendRequest
+from engine.hand_evaluator import HandEvaluator
+from engine.equity import EquityEngine
+from engine.pot_odds import PotOddsCalculator
 
 router = APIRouter(prefix="/recommend", tags=["AI Strategy Recommendations"])
 
@@ -26,7 +26,6 @@ def get_strategy_recommendation(payload: RecommendRequest, db: Session = Depends
         pot_odds_positive = pot_odds_result.get("calling_ev_positive", False)
 
         action = "FOLD"
-        confidence = 0.85
 
         if win_equity > 0.65:
             action = "RAISE"
@@ -37,7 +36,8 @@ def get_strategy_recommendation(payload: RecommendRequest, db: Session = Depends
         else:
             action = "CALL"
 
-        amount = payload.bet_to_call if action == "CALL" else (payload.pot_size * 0.5 if action == "RAISE" else 0.0)
+        amount = payload.bet_to_call if action == "CALL" else (payload.pot_size * 0.75 if action == "RAISE" else 0.0)
+        confidence = round(min(max(0.25, 0.5 + (win_equity - 0.5) * 0.8), 0.99), 2)
 
         latest_hand = db.query(HandHistory.hand_number).filter(HandHistory.session_id == payload.session_id).order_by(HandHistory.hand_number.desc()).first()
         next_hand_number = (latest_hand[0] + 1) if latest_hand else 1
@@ -80,6 +80,8 @@ def get_strategy_recommendation(payload: RecommendRequest, db: Session = Depends
             "pot_odds": pot_odds_result
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
         db.rollback()
         raise HTTPException(

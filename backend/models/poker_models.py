@@ -2,7 +2,7 @@
 import datetime
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean, JSON
 from sqlalchemy.orm import relationship
-from backend.database import Base
+from database import Base
 
 class GameSession(Base):
     __tablename__ = "game_sessions"

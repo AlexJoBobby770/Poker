@@ -1,6 +1,6 @@
 
-from backend.database import SessionLocal, engine, Base
-from backend.models.poker_models import GameSession, OpponentProfile
+from database import SessionLocal, engine, Base
+from models.poker_models import GameSession, OpponentProfile
 
 
 Base.metadata.create_all(bind=engine)

@@ -1,7 +1,7 @@
 # backend/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import session_router, recommend_router
+from routers import session_router, recommend_router
 
 app = FastAPI(
     title="Poker AI Assistant API",

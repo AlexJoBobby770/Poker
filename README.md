@@ -31,5 +31,5 @@ Follow these steps to spin the development environment back up after a break:
 1. **Start the Database Container**
    Ensure Docker Desktop is running in the background, then execute:
    ```powershell
-   cd C:\Users\alexj\Desktop\projects\poker-assistant
+   cd C:\Users\alexj\Desktop\projects\poker-assistant\backend
    docker compose up -d
